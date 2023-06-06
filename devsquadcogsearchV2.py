@@ -33,13 +33,13 @@ def read_api_key(file_path):
         raise
 # Read Azure Cognitive Search API key from a file
 azure_search_api_key = read_api_key("azure_search_key.txt")
-azure_search_service_name = "janncogsearch"
+azure_search_service_name = "<NAME>"
 
 
 
 def azure_search_query(search_query_text):
     try:
-        url = f"https://{azure_search_service_name}.search.windows.net/indexes/janndata-index/docs/search?api-version=2021-04-30-Preview"
+        url = f"https://{azure_search_service_name}.search.windows.net/indexes/<INDEXNAME>/docs/search?api-version=2021-04-30-Preview"
         payload = {
             "search": search_query_text,
             "top": 3,
