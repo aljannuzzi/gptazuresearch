@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .chatbox {
+            width: 600px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="chatbox" class="chatbox" disabled></textarea>
+    <input type="text" id="inputbox">
+    <button onclick="sendRequest()">Send</button>
+
+    <script>
+        function typeResponse(message) {
+            var i = 0;
+            var speed = 20; // Speed of typing effect in milliseconds
+            var chatbox = document.getElementById("chatbox");
+
+            function typeWriter() {
+                if (i < message.length) {
+                    chatbox.value += message.charAt(i);
+                    i++;
+                    chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+                    setTimeout(typeWriter, speed);
+                }
+            }
+
+            typeWriter();
+        }
+
+        async function sendRequest() {
+            var inputbox = document.getElementById('inputbox');
+            var chatbox = document.getElementById('chatbox');
+            var userInput = inputbox.value;
+            inputbox.value = '';
+
+            chatbox.value += "User: " + userInput + "\n";
+            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+
+            const response = await fetch('http://127.0.0.1:5000/api/v1/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({input_text: userInput}),
+            });
+
+            const data = await response.json();
+            var botResponse = data.response;
+
+            chatbox.value += "Assistant: ";
+            typeResponse(botResponse + "\n");
+        }
+    </script>
+</body>
+</html>
